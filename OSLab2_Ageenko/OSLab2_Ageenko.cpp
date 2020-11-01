@@ -53,25 +53,16 @@ int main(int argc, char* argv[]) {
 	mutex m1;
 	mutex m2;
 	mutex m3;
-	if (argc == 2) {
-		thread ta(thread_func, argv[1], ref(vec), ref(m1), ref(m2), ref(m3));
-		ta.join();
+	vector <thread*> threads(10);
+	for (int i = 1; i < argc; i++)
+	{
+		thread* t = new thread(thread_func, argv[i], ref(vec), ref(m1), ref(m2), ref(m3));
+		threads.push_back(t);
 	}
-	else if (argc == 3) {
-		thread ta(thread_func, argv[1], ref(vec), ref(m1), ref(m2), ref(m3));
-		thread tb(thread_func, argv[2], ref(vec), ref(m1), ref(m2), ref(m3));
-		ta.join();
-		tb.join();
-	}
-	else if (argc == 4) {
-		thread ta(thread_func, argv[1], ref(vec), ref(m1), ref(m2), ref(m3));
-		thread tb(thread_func, argv[2], ref(vec), ref(m1), ref(m2), ref(m3));
-		thread tc(thread_func, argv[3], ref(vec), ref(m1), ref(m2), ref(m3));
-		ta.join();
-		tb.join();
-		tc.join();
-	}
-	else {
-			cout << "too many arguments" << endl;
+	for (auto th : threads) {
+		if (th) {
+			th->join();
 		}
+	}
+	return 0;
 	}
